@@ -1,0 +1,1 @@
+#TODO NESHTA: add general structure and maybe pickle-file reading/writing
