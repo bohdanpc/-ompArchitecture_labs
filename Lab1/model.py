@@ -9,9 +9,6 @@ class Record( object ) :
         self.length = _length
         self.coefficient = _coefficient
 
-    def print( self , begins = '' , ends = '\n' ) :
-        print( begins + '%10s: %10s' + ends % (self.data , self.coefficient * self.length) )
-
 
 def initialise( file_name ) :
     try :
