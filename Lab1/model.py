@@ -9,6 +9,9 @@ class Record( object ) :
         self.length = _length
         self.coefficient = _coefficient
 
+    def get( self ) :
+        return [ self.data , self.length , self.coefficient ]
+
 
 def initialise( file_name ) :
     try :
