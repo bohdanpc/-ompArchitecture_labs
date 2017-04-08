@@ -14,16 +14,18 @@ def menu():
 
 
 def enter_date():
-    date = input("Enter the date(dd mm yyyy): ")
-    return date
+    return input("Enter the date(dd mm yyyy): ")
 
 
 def enter_period():
     date_beg = input("Enter beginning date(dd mm yyyy): ")
     date_end = input("Enter ending date(dd mm yyyy): ")
-    return [date_beg, date_end]
+    return date_beg, date_end
 
 
 def print_record(record):
     for item in record:
         print(item, '\t')
+    print('\n')
+
+
