@@ -32,3 +32,20 @@ def find_by_date(records, date):
         if item.date == date:
             return item
     return False
+
+
+def get_used_fuel(record):
+    return (record.coefficient * record.length) / 100
+
+
+def get_general_length(records):
+    res = 0
+    for item in records:
+        res += item.length
+    return res
+
+
+def get_general_fuel_used(records):
+    res = 0
+    for item in records:
+        res += get_used_fuel(item)

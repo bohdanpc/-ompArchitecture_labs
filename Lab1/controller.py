@@ -3,8 +3,13 @@ from model import *
 
 
 def show_all(records):
+    view.record_names()
     for item in records:
-        view.print_record(item)
+        view.print_record(item, get_used_fuel(item))
+
+
+def show_summary(records):
+    view.print_summary(get_general_length(records), get_general_fuel_used(records))
 
 
 def show_by_date():
@@ -14,28 +19,26 @@ def show_by_date():
 def show_period():
     pass
 
-def add_record():
-    pass
 
+def add_record(item_list, records):
+    record = Record(item_list[0], item_list[1], item_list[2])
+    records.append(record)
 
 
 def main_func():
+    """ readiness level: 1, 4, 7"""
     choice = ''
     records = initialise("fuel_consumption.pickle")
-    while choice != "9":
+    while choice != "7":
         choice = str(view.menu())
         if choice == "1":
-            print("first case")
+            show_all(records)
         elif choice == "2":
-            pass
+            show_summary(records)
         elif choice == "3":
             pass
-        elif choice == "4":
-            pass
-        elif choice == "5":
-            pass
         elif choice == "6":
-            pass
+            add_record(view.enter_trip_details(), records)
         elif choice == "7":
             save_all(records, "fuel_consumption.pickle")
         else:
@@ -43,4 +46,3 @@ def main_func():
 
 
 main_func()
-
