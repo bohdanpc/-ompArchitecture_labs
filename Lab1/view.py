@@ -1,5 +1,5 @@
 def menu():
-	print("---Record fuel consumption---")
+    print("---Record fuel consumption---")
     print
     print("1) Show all")
     print("2) Show by date")
@@ -9,5 +9,21 @@ def menu():
     print("6) Show consumption of fuel per 100 km")
     print("7) Exit")
     print
-    choice = raw_input("Make your choice: ")
+    choice = input("Make your choice: ")
     return choice
+
+
+def enter_date():
+    date = input("Enter the date(dd mm yyyy): ")
+    return date
+
+
+def enter_period():
+    date_beg = input("Enter beginning date(dd mm yyyy): ")
+    date_end = input("Enter ending date(dd mm yyyy): ")
+    return [date_beg, date_end]
+
+
+def print_record(record):
+    for item in record:
+        print(item, '\t')
