@@ -2,14 +2,13 @@ import _pickle
 
 
 class Record(object):
-    def __init__(self, date, _data, _length, _coefficient):
-        self.date = date
-        self.data = _data
+    def __init__(self, _date, _length, _coefficient):
+        self.date = _date
         self.length = _length
         self.coefficient = _coefficient
 
     def get(self):
-        return [self.data, self.length, self.coefficient]
+        return [self.date, self.length, self.coefficient]
 
 
 def initialise(file_name):

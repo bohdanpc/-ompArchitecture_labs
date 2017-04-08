@@ -1,3 +1,8 @@
+
+def print_record(item):
+    pass
+
+
 def menu():
     print("---Record fuel consumption---")
     print
@@ -9,8 +14,6 @@ def menu():
     print("6) Show consumption of fuel per 100 km")
     print("7) Exit")
     print
-    choice = input("Make your choice: ")
-    return choice
 
 
 def enter_date():
