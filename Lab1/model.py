@@ -37,13 +37,18 @@ def save_all( records , file_name ) :
 def check_validity_of_date( date ) :
     """Returns 'True' if date is valid or 'False' otherwise"""
     tmp = date.split( '-' )
-    if tmp.__len__( ) != 3 or tmp[ 0 ].__len__( ) != 2 or tmp[ 1 ].__len__( ) != 2 or tmp[ 2 ].__len__( ) != 4 :
-        return False
-    for letter in date:
-        tmp= int(letter)
-        if tmp !=45 and (tmp<48 or tmp>57):
+    try:
+        day,month,year=int(tmp[0]),int(tmp[1]),int(tmp[2])
+        if month==2:
+            if year%4==0 and day>29:
+                return False
+            elif day>28:
+                return False
+        elif month>12 or day>31 or (month in (4,6,9,11) and day>30):
             return False
-    return True
+        return True
+    except:
+        return False
 
 
 def compare_date( first_date , second_date ) :
