@@ -23,7 +23,7 @@ def initialise(file_name):
 
 def save_all(records, file_name):
     with open(file_name, 'wb') as f:
-        _pickle.dump(records, f, _pickle.HIGHEST_PROTOCOL)
+        _pickle.dump(records, f)
     f.close()
 
 
