@@ -11,10 +11,6 @@ class Record( object ) :
         self.length = _length
         self.coefficient = _coefficient
 
-    def get( self ) :
-        """Returns list of private members"""
-        return [ self.date , self.length , self.coefficient ]
-
 
 def initialise( file_name ) :
     """Returns list of values we've already added"""
