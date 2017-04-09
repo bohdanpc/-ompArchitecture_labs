@@ -37,17 +37,17 @@ def save_all( records , file_name ) :
 def check_validity_of_date( date ) :
     """Returns 'True' if date is valid or 'False' otherwise"""
     tmp = date.split( '-' )
-    try:
-        day,month,year=int(tmp[0]),int(tmp[1]),int(tmp[2])
-        if month==2:
-            if year%4==0 and day>29:
+    try :
+        day , month , year = int( tmp[ 0 ] ) , int( tmp[ 1 ] ) , int( tmp[ 2 ] )
+        if month == 2 :
+            if year % 4 == 0 and day < 30 :
+                return True
+            elif day > 28 :
                 return False
-            elif day>28:
-                return False
-        elif month>12 or day>31 or (month in (4,6,9,11) and day>30):
+        elif month > 12 or day > 31 or (month in (4 , 6 , 9 , 11) and day > 30) :
             return False
         return True
-    except:
+    except :
         return False
 
 
