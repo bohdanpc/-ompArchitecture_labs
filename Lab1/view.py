@@ -13,12 +13,12 @@ def menu():
 
 
 def enter_date():
-    return input("Enter the date(dd mm yyyy): ")
+    return input("Enter the date(dd-mm-yyyy): ")
 
 
 def enter_period():
-    date_beg = input("Enter beginning date(dd mm yyyy): ")
-    date_end = input("Enter ending date(dd mm yyyy): ")
+    date_beg = input("Enter beginning date(dd-mm-yyyy): ")
+    date_end = input("Enter ending date(dd-mm-yyyy): ")
     return date_beg, date_end
 
 
@@ -30,16 +30,15 @@ def enter_trip_details():
 
 
 def print_record(record, used_fuel = -1):
-    print(record.date, "\t", record.length, "\t", record.coefficient, "\t", end="")
+    print('%10s|%10d|%18d|' % (record.date, record.length, record.coefficient), end = "")
     if used_fuel != -1:
-        print(used_fuel)
-    print
+        print('%10d|' % (used_fuel))
 
 
 def record_names():
-    print("date\tlength(km)\tconsumption(100km)\tfuel used\n")
+    print('\n%10s|%10s|%18s|%10s|' % ("Date", "Length(km)", "Consumption(100km)", "Fuel used"))
 
 
 def print_summary(length, fuel_used):
-    print("general length: ", length, "\n")
-    print("fuel used: ", fuel_used, "\n")
+    print("\nGeneral length: ", length)
+    print("Fuel used: ", fuel_used)
