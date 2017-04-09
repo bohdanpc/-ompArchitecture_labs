@@ -32,7 +32,7 @@ def enter_trip_details():
 def print_record(record, used_fuel = -1):
     print('%10s|%10d|%18d|' % (record.date, record.length, record.coefficient), end = "")
     if used_fuel != -1:
-        print('%10d|' % (used_fuel))
+        print('%10d|' % used_fuel)
 
 
 def record_names():

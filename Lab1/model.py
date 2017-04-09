@@ -118,6 +118,6 @@ def get_general_length( records ) :
 def get_general_fuel_used( records ) :
     """Returns all fuel we've spent"""
     res = 0
-    for item in records :
-        res += get_used_fuel( item )
+    for item in records:
+        res += get_used_fuel(item)
     return res

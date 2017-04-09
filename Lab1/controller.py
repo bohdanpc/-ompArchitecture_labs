@@ -12,11 +12,17 @@ def show_summary(records):
     view.print_summary(get_general_length(records), get_general_fuel_used(records))
 
 
-def show_by_date():
+def show_summary_period(records):
+    left, right = view.enter_period()
+    # records_period = model.get_records_period(left, right, records)
+    # view.print_summary(get_general_length(records_period), get_general_fuel_used(records_period)
+
+
+def show_by_date(records):
     pass
 
 
-def show_period():
+def show_by_period(records):
     pass
 
 
@@ -36,6 +42,10 @@ def main_func():
         elif choice == "2":
             show_summary(records)
         elif choice == "3":
+            show_by_period(records)
+        elif choice == "4":
+            show_summary_period(records)
+        elif choice == "5":
             pass
         elif choice == "6":
             add_record(view.enter_trip_details(), records)
