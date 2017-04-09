@@ -93,7 +93,7 @@ def find_by_date_range( records , first_date , second_date ) :
     """Returns list of items chosen by date in date range or 'False' otherwise"""
     items = [ ]
     for item in records :
-        if compare_date( item.date , first_date ) == 1 or compare_date( item.date , second_date ) == -1 :
+        if compare_date( item.date , first_date ) == -1 or compare_date( item.date , second_date ) == 1 :
             continue
         else :
             items.append( item )
