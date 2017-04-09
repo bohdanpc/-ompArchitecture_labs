@@ -51,6 +51,24 @@ def check_validity_of_date( date ) :
         return False
 
 
+def check_validity_of_length( length ) :
+    """Returns 'True' if length is valid or 'False' otherwise"""
+    try :
+        float( length )
+        return True
+    except :
+        return False
+
+
+def check_validity_of_coefficient( coefficient ) :
+    """Returns 'True' if coefficient is valid or 'False' otherwise"""
+    try :
+        float( coefficient )
+        return True
+    except :
+        return False
+
+
 def compare_date( first_date , second_date ) :
     """Returns '0', '1' or '-1' dependent on equality of parameters"""
     first = first_date.split( '-' )
