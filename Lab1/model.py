@@ -9,8 +9,8 @@ class Record(object):
         """Class ctor
 
         >>> rec = Record("12-01-2017",125.50,3.14198)
-        >>> print("%s,%5.2f,%6.5f" %(rec.date,rec.length,rec.coefficient))
-        12-01-2017,125.50,3.14198
+        >>> [rec.date,rec.length,rec.coefficient]
+        ['12-01-2017', 125.5, 3.14198]
         """
         self.date = _date
         self.length = _length
@@ -18,10 +18,7 @@ class Record(object):
 
 
 def initialise(file_name):
-    """Returns list of values we've already added
-
-
-    """
+    """Returns list of values we've already added"""
     try:
         with open(file_name, 'rb') as f:
             records = _pickle.load(f)
@@ -39,7 +36,31 @@ def save_all(records, file_name):
 
 
 def check_validity_of_date(date):
-    """Returns 'True' if date is valid or 'False' otherwise"""
+    """Returns 'True' if date is valid or 'False' otherwise
+
+    >>> check_validity_of_date("12-28-1990")
+    False
+    >>> check_validity_of_date("-12-12-12")
+    False
+    >>> check_validity_of_date("12-12-invalid")
+    False
+    >>> check_validity_of_date("returns false")
+    False
+    >>> check_validity_of_date("12--12-12")
+    False
+    >>> check_validity_of_date("30-02-2016")
+    False
+    >>> check_validity_of_date("42-12-2012")
+    False
+    >>> check_validity_of_date("31-04-2016")
+    False
+    >>> check_validity_of_date("29-02-2017")
+    False
+    >>> check_validity_of_date("10-04-2017")
+    True
+    >>> check_validity_of_date("29-02-2016")
+    True
+    """
     tmp = date.split('-')
     try:
         day, month, year = int(tmp[0]), int(tmp[1]), int(tmp[2])
@@ -56,7 +77,15 @@ def check_validity_of_date(date):
 
 
 def check_validity_of_length(length):
-    """Returns 'True' if length is valid or 'False' otherwise"""
+    """Returns 'True' if length is valid or 'False' otherwise
+
+    >>> check_validity_of_length(128)
+    True
+    >>> check_validity_of_length('12h')
+    False
+    >>> check_validity_of_length('12')
+    True
+    """
     try:
         float(length)
         return True
@@ -65,7 +94,15 @@ def check_validity_of_length(length):
 
 
 def check_validity_of_coefficient(coefficient):
-    """Returns 'True' if coefficient is valid or 'False' otherwise"""
+    """Returns 'True' if coefficient is valid or 'False' otherwise
+
+    >>> check_validity_of_coefficient(27)
+    True
+    >>> check_validity_of_coefficient('Invalid')
+    False
+    >>> check_validity_of_coefficient('128')
+    True
+    """
     try:
         float(coefficient)
         return True
@@ -74,7 +111,15 @@ def check_validity_of_coefficient(coefficient):
 
 
 def compare_date(first_date, second_date):
-    """Returns '0', '1' or '-1' dependent on equality of parameters"""
+    """Returns '0', '1' or '-1' dependent on equality of parameters
+
+    >>> compare_date("12-12-12","12-12-2017")
+    -1
+    >>> compare_date("12-12-2017","12-12-12")
+    1
+    >>> compare_date("12-12-2017","12-12-2017")
+    0
+    """
     first = first_date.split('-')
     second = second_date.split('-')
     first = datetime(int(first[2]), int(first[1]), int(first[0]))
@@ -89,16 +134,12 @@ def compare_date(first_date, second_date):
 def find_by_date(records, date):
     """Returns list of items by date or 'False' otherwise
 
-    >>> l=[]
-    >>> l.append(Record("12-01-2017",125,3.14))
-    >>> l.append(Record("12-03-2017",250,14.20))
-    >>> l.append(Record("12-03-2017",456,55.11))
+    >>> l=[Record("12-01-2017",125,3.14), Record("12-03-2017",250,14.20), Record("12-03-2017",456,55.11)]
     >>> result = find_by_date(l,"12-03-2017")
-    >>> for item in result:
-            print("%s,%d,%4.2f)
-
-    12-03-2017,250,14.20
-    12-03-2017,456,55.11
+    >>> result[0].length
+    250
+    >>> result[1].length
+    456
     """
     items = []
     for item in records:
@@ -112,20 +153,12 @@ def find_by_date(records, date):
 def find_by_date_range(records, first_date, second_date):
     """Returns list of items chosen by date in date range or 'False' otherwise
 
-    >>> l=[]
-    >>> l.append(Record("12-01-2017",125,3.14))
-    >>> l.append(Record("12-02-2017",250,14.20))
-    >>> l.append(Record("12-03-2017",456,55.11))
-    >>> l.append(Record("12-04-2017",887,15))
-    >>> l.append(Record("12-05-2017",337,1.08))
-    >>> l.append(Record("12-06-2017",225,0.75))
+    >>> l=[Record("12-01-2017",125,3.14), Record("12-02-2017",250,14.20), Record("12-03-2017",456,55.11), Record("12-04-2017",887,15), Record("12-05-2017",337,1.08), Record("12-06-2017",225,0.75)]
     >>> result = find_by_date_range(l,"01-03-2017","22-05-2017")
-    >>> for item in result:
-            print("%s,%d,%4.2f)
-
-    12-03-2017,456,55.11
-    12-04-2017,887,15.00
-    12-05-2017,337,1.08
+    >>> result[0].length
+    456
+    >>> result[1].length
+    887
     """
     items = []
     for item in records:
@@ -139,12 +172,20 @@ def find_by_date_range(records, first_date, second_date):
 
 
 def get_used_fuel(record):
-    """Returns value of used fuel by given record"""
+    """Returns value of used fuel by given record
+
+    >>> get_used_fuel(Record("12-03-2017",200,10))
+    20.0
+    """
     return (record.coefficient * record.length) / 100
 
 
 def get_general_length(records):
-    """Returns all length we've passed through"""
+    """Returns all length we've passed through
+
+    >>> get_general_length([Record("12-03-2017",300,10),Record("12-03-2017",100,20)])
+    400
+    """
     res = 0
     for item in records:
         res += item.length
@@ -152,7 +193,11 @@ def get_general_length(records):
 
 
 def get_general_fuel_used(records):
-    """Returns all fuel we've spent"""
+    """Returns all fuel we've spent
+
+    >>> get_general_fuel_used([Record("12-03-2017",300,10),Record("12-03-2017",100,20)])
+    50.0
+    """
     res = 0
     for item in records:
         res += get_used_fuel(item)
