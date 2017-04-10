@@ -207,4 +207,4 @@ def get_general_fuel_used(records):
 if __name__ == "__main__":
     import doctest
 
-    doctest.testmod(verbose=True)
+    doctest.testmod()
