@@ -6,14 +6,22 @@ class Record(object):
     """Class that represents container for length of the way, date and fuel coefficient"""
 
     def __init__(self, _date, _length, _coefficient):
-        """Class ctor"""
+        """Class ctor
+
+        >>> rec = Record("12-01-2017",125.50,3.14198)
+        >>> print("%s,%5.2f,%6.5f" %(rec.date,rec.length,rec.coefficient))
+        12-01-2017,125.50,3.14198
+        """
         self.date = _date
         self.length = _length
         self.coefficient = _coefficient
 
 
 def initialise(file_name):
-    """Returns list of values we've already added"""
+    """Returns list of values we've already added
+
+
+    """
     try:
         with open(file_name, 'rb') as f:
             records = _pickle.load(f)
@@ -25,9 +33,10 @@ def initialise(file_name):
 
 def save_all(records, file_name):
     """Saves list of all values to file"""
-    with open(file_name, 'wb') as f:
-        _pickle.dump(records, f, _pickle.HIGHEST_PROTOCOL)
-    f.close()
+    if records:
+        with open(file_name, 'wb') as f:
+            _pickle.dump(records, f, _pickle.HIGHEST_PROTOCOL)
+        f.close()
 
 
 def check_validity_of_date(date):
@@ -90,7 +99,13 @@ def find_by_date(records, date):
 
 
 def find_by_date_range(records, first_date, second_date):
-    """Returns list of items chosen by date in date range or 'False' otherwise"""
+    """Returns list of items chosen by date in date range or 'False' otherwise
+
+    >>> l=[]
+    >>> l.append(Record("12-01-2017",125.50,3.14198))
+    >>> l.append(Record("12-01-2017",25,14.2))
+    >>> l.append(Record("12-01-2017",12000,0.46))
+    """
     items = []
     for item in records:
         if compare_date(item.date, first_date) == -1 or compare_date(item.date, second_date) == 1:
@@ -126,4 +141,4 @@ def get_general_fuel_used(records):
 if __name__ == "__main__":
     import doctest
 
-    doctest.testmod()
+    doctest.testmod(verbose=True)
