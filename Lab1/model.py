@@ -33,10 +33,9 @@ def initialise(file_name):
 
 def save_all(records, file_name):
     """Saves list of all values to file"""
-    if records:
-        with open(file_name, 'wb') as f:
-            _pickle.dump(records, f, _pickle.HIGHEST_PROTOCOL)
-        f.close()
+    with open(file_name, 'wb') as f:
+        _pickle.dump(records, f, _pickle.HIGHEST_PROTOCOL)
+    f.close()
 
 
 def check_validity_of_date(date):
