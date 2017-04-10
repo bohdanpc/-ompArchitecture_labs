@@ -87,7 +87,19 @@ def compare_date(first_date, second_date):
 
 
 def find_by_date(records, date):
-    """Returns list of items by date or 'False' otherwise"""
+    """Returns list of items by date or 'False' otherwise
+
+    >>> l=[]
+    >>> l.append(Record("12-01-2017",125,3.14))
+    >>> l.append(Record("12-03-2017",250,14.20))
+    >>> l.append(Record("12-03-2017",456,55.11))
+    >>> result = find_by_date(l,"12-03-2017")
+    >>> for item in result:
+            print("%s,%d,%4.2f)
+
+    12-03-2017,250,14.20
+    12-03-2017,456,55.11
+    """
     items = []
     for item in records:
         if item.date == date:
@@ -101,9 +113,19 @@ def find_by_date_range(records, first_date, second_date):
     """Returns list of items chosen by date in date range or 'False' otherwise
 
     >>> l=[]
-    >>> l.append(Record("12-01-2017",125.50,3.14198))
-    >>> l.append(Record("12-01-2017",25,14.2))
-    >>> l.append(Record("12-01-2017",12000,0.46))
+    >>> l.append(Record("12-01-2017",125,3.14))
+    >>> l.append(Record("12-02-2017",250,14.20))
+    >>> l.append(Record("12-03-2017",456,55.11))
+    >>> l.append(Record("12-04-2017",887,15))
+    >>> l.append(Record("12-05-2017",337,1.08))
+    >>> l.append(Record("12-06-2017",225,0.75))
+    >>> result = find_by_date_range(l,"01-03-2017","22-05-2017")
+    >>> for item in result:
+            print("%s,%d,%4.2f)
+
+    12-03-2017,456,55.11
+    12-04-2017,887,15.00
+    12-05-2017,337,1.08
     """
     items = []
     for item in records:
