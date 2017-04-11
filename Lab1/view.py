@@ -38,7 +38,6 @@ def menu(input_func=input):
     Make your choice: 'abc'
     """
     print("\n---Record fuel consumption---")
-    print
     print("1) Show the whole table")
     print("2) Show general summary")
     print("3) Show table for a certain period")
@@ -46,7 +45,6 @@ def menu(input_func=input):
     print("5) Show info by date")
     print("6) Add a new trip")
     print("7) Exit")
-    print
     print("Make your choice: ", end="")
     return input_func()
 
@@ -165,6 +163,6 @@ def invalid_value():
     """
     print("Invalid values entered")
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+#if __name__ == "__main__":
+#    import doctest
+#    doctest.testmod()

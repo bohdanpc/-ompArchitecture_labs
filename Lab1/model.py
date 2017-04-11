@@ -145,8 +145,6 @@ def find_by_date(records, date):
     for item in records:
         if item.date == date:
             items.append(item)
-    if not items:
-        return False
     return items
 
 
@@ -203,8 +201,8 @@ def get_general_fuel_used(records):
         res += get_used_fuel(item)
     return res
 
+#
+#if __name__ == "__main__":
+#    import doctest
 
-if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()
+#    doctest.testmod()
