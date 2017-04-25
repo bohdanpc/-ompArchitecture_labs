@@ -2,6 +2,7 @@ import view
 import model
 from model import Record
 
+
 def show_all(records):
     """show all present records in database
 
@@ -59,7 +60,8 @@ def show_summary_period(records, input_func1=input, input_func2=input):
 Invalid values entered
     """
     left, right = view.enter_period(input_func1, input_func2)
-    if model.check_validity_of_date(left) and model.check_validity_of_date(right):
+    if model.check_validity_of_date(left) and \
+            model.check_validity_of_date(right):
         records_period = model.find_by_date_range(records, left, right)
         show_summary(records_period)
     else:
@@ -116,7 +118,8 @@ Invalid values entered
     """
 
     left, right = view.enter_period(input_func1, input_func2)
-    if model.check_validity_of_date(left) and model.check_validity_of_date(right):
+    if model.check_validity_of_date(left) and \
+            model.check_validity_of_date(right):
         records_period = model.find_by_date_range(records, left, right)
         show_all(records_period)
     else:
@@ -179,5 +182,6 @@ def main_func(input_func1=input):
             add_record(records)
         elif choice == "7":
             model.save_all(records, "fuel_consumption.pickle")
+
 
 main_func()

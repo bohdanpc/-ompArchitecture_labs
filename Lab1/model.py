@@ -3,7 +3,8 @@ from _datetime import datetime
 
 
 class Record(object):
-    """Class that represents container for length of the way, date and fuel coefficient"""
+    """Class that represents container for length of the way, date and fuel
+    coefficient """
 
     def __init__(self, _date, _length, _coefficient):
         """Class ctor
@@ -85,10 +86,12 @@ def check_validity(item):
     True
     >>> check_validity(["10-09-2015", "12", 10])
     True
-    >>> check_validity(["5-4-2014", 53.2, "152b"])
+    >>> check_validity(["5-04-2014", 53.2, "152b"])
+    False
     """
+    if not check_validity_of_date(item[0]):
+        return False
     try:
-        check_validity_of_date(item[0])
         item[1] = float(item[1])
         item[2] = float(item[2])
         return True
@@ -120,7 +123,8 @@ def compare_date(first_date, second_date):
 def find_by_date(records, date):
     """Returns list of items by date or 'False' otherwise
 
-    >>> l=[Record("12-01-2017",125,3.14), Record("12-03-2017",250,14.20), Record("12-03-2017",456,55.11)]
+    >>> l=[Record("12-01-2017",125,3.14), Record("12-03-2017",250,14.20),\
+    Record("12-03-2017",456,55.11)]
     >>> result = find_by_date(l,"12-03-2017")
     >>> result[0].length
     250
@@ -137,7 +141,9 @@ def find_by_date(records, date):
 def find_by_date_range(records, first_date, second_date):
     """Returns list of items chosen by date in date range or 'False' otherwise
 
-    >>> l=[Record("12-01-2017",125,3.14), Record("12-02-2017",250,14.20), Record("12-03-2017",456,55.11), Record("12-04-2017",887,15), Record("12-05-2017",337,1.08), Record("12-06-2017",225,0.75)]
+    >>> l=[Record("12-01-2017",125,3.14), Record("12-02-2017",250,14.20),\
+     Record("12-03-2017",456,55.11), Record("12-04-2017",887,15), \
+     Record("12-05-2017",337,1.08), Record("12-06-2017",225,0.75)]
     >>> result = find_by_date_range(l,"01-03-2017","22-05-2017")
     >>> result[0].length
     456
@@ -146,7 +152,8 @@ def find_by_date_range(records, first_date, second_date):
     """
     items = []
     for item in records:
-        if compare_date(item.date, first_date) == -1 or compare_date(item.date, second_date) == 1:
+        if compare_date(item.date, first_date) == -1 or \
+                        compare_date(item.date, second_date) == 1:
             continue
         else:
             items.append(item)
@@ -165,7 +172,8 @@ def get_used_fuel(record):
 def get_general_length(records):
     """Returns all length we've passed through
 
-    >>> get_general_length([Record("12-03-2017",300,10),Record("12-03-2017",100,20)])
+    >>> get_general_length([Record("12-03-2017",300,10),\
+    Record("12-03-2017",100,20)])
     400
     """
     res = 0
@@ -177,11 +185,11 @@ def get_general_length(records):
 def get_general_fuel_used(records):
     """Returns all fuel we've spent
 
-    >>> get_general_fuel_used([Record("12-03-2017",300,10),Record("12-03-2017",100,20)])
+    >>> get_general_fuel_used([Record("12-03-2017",300,10),\
+     Record("12-03-2017",100,20)])
     50.0
     """
     res = 0
     for item in records:
         res += get_used_fuel(item)
     return res
-

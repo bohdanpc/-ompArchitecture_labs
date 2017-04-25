@@ -1,3 +1,5 @@
+import controller
+
 def menu(input_func=input):
     """Shows menu on the screen
 
@@ -72,13 +74,17 @@ def enter_date(input_func=input):
 def enter_period(input_func1=input, input_func2=input):
     """Asked the customer to enter the period
 
-    >>> enter_period(input_func1 = lambda:"11-12-1999", input_func2 = lambda:"10-12-1999")
+    >>> enter_period(input_func1 = lambda:"11-12-1999", \
+    input_func2 = lambda:"10-12-1999")
     <BLANKLINE>
-    Enter beginning date(dd-mm-yyyy):Enter ending date(dd-mm-yyyy):('11-12-1999', '10-12-1999')
+    Enter beginning date(dd-mm-yyyy):Enter ending date(dd-mm-yyyy):\
+('11-12-1999', '10-12-1999')
 
-    >>> enter_period(input_func1 = lambda:"dd-mm-yyyy", input_func2 = lambda:"dd1-mm1-yyyy1")
+    >>> enter_period(input_func1 = lambda:"dd-mm-yyyy", \
+    input_func2 = lambda:"dd1-mm1-yyyy1")
     <BLANKLINE>
-    Enter beginning date(dd-mm-yyyy):Enter ending date(dd-mm-yyyy):('dd-mm-yyyy', 'dd1-mm1-yyyy1')
+    Enter beginning date(dd-mm-yyyy):Enter ending date(dd-mm-yyyy):\
+('dd-mm-yyyy', 'dd1-mm1-yyyy1')
     """
     print("\nEnter beginning date(dd-mm-yyyy):", end="")
     date_beg = input_func1()
@@ -87,16 +93,21 @@ def enter_period(input_func1=input, input_func2=input):
     return date_beg, date_end
 
 
-def enter_trip_details(input_func1=input, input_func2=input, input_func3=input):
+def enter_trip_details(input_func1=input,
+                       input_func2=input, input_func3=input):
     """Asked the customer to enter a new trip
 
-    >>> enter_trip_details(input_func1 = lambda:"11-05-2014", input_func2 = lambda: 452, input_func3 = lambda: 38)
+    >>> enter_trip_details(input_func1 = lambda:"11-05-2014", \
+    input_func2 = lambda: 452, input_func3 = lambda: 38)
     <BLANKLINE>
-    Enter the date of your trip(dd-mm-yyyy):Enter the length of your trip:Enter the fuel consumption:['11-05-2014', 452, 38]
+    Enter the date of your trip(dd-mm-yyyy):Enter the length of your trip:\
+Enter the fuel consumption:['11-05-2014', 452, 38]
 
-    >>> enter_trip_details(input_func1 = lambda:"dd-mm-yyyy", input_func2 = lambda: "aaa", input_func3 = lambda: "bb")
+    >>> enter_trip_details(input_func1 = lambda:"dd-mm-yyyy", \
+    input_func2 = lambda: "aaa", input_func3 = lambda: "bb")
     <BLANKLINE>
-    Enter the date of your trip(dd-mm-yyyy):Enter the length of your trip:Enter the fuel consumption:['dd-mm-yyyy', 'aaa', 'bb']
+    Enter the date of your trip(dd-mm-yyyy):Enter the length of your trip:\
+Enter the fuel consumption:['dd-mm-yyyy', 'aaa', 'bb']
     """
     print("\nEnter the date of your trip(dd-mm-yyyy):", end="")
     date = input_func1()
@@ -120,7 +131,8 @@ def print_record(record, used_fuel=-1):
     >>> print_record(record, 75)
     05-07-2014|     45.00|             65.00|     75.00|
     """
-    print('%10s|%10.2f|%18.2f|' % (record.date, record.length, record.coefficient), end = "")
+    print('%10s|%10.2f|%18.2f|' % (record.date, record.length,
+                                   record.coefficient), end="")
     if used_fuel != -1:
         print('%10.2f|' % used_fuel)
     else:
@@ -134,7 +146,8 @@ def record_names():
     <BLANKLINE>
           Date|Length(km)|Consumption(100km)| Fuel used|
     """
-    print('\n%10s|%10s|%18s|%10s|' % ("Date", "Length(km)", "Consumption(100km)", "Fuel used"))
+    print('\n%10s|%10s|%18s|%10s|' % ("Date", "Length(km)",
+                                      "Consumption(100km)", "Fuel used"))
 
 
 def print_summary(length, fuel_used):
@@ -161,4 +174,3 @@ def invalid_value():
     Invalid values entered
     """
     print("Invalid values entered")
-
