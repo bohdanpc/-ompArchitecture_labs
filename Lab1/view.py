@@ -11,7 +11,7 @@ def menu(input_func=input):
     5) Show info by date
     6) Add a new trip
     7) Exit
-    Make your choice: 1
+    Make your choice:1
 
     >>> menu(input_func = lambda:-5)
     <BLANKLINE>
@@ -23,7 +23,7 @@ def menu(input_func=input):
     5) Show info by date
     6) Add a new trip
     7) Exit
-    Make your choice: -5
+    Make your choice:-5
 
     >>> menu(input_func = lambda:'abc')
     <BLANKLINE>
@@ -35,7 +35,7 @@ def menu(input_func=input):
     5) Show info by date
     6) Add a new trip
     7) Exit
-    Make your choice: 'abc'
+    Make your choice:'abc'
     """
     print("\n---Record fuel consumption---")
     print("1) Show the whole table")
@@ -45,7 +45,7 @@ def menu(input_func=input):
     print("5) Show info by date")
     print("6) Add a new trip")
     print("7) Exit")
-    print("Make your choice: ", end="")
+    print("Make your choice:", end="")
     return input_func()
 
 
@@ -90,7 +90,6 @@ def enter_period(input_func1=input, input_func2=input):
 def enter_trip_details(input_func1=input, input_func2=input, input_func3=input):
     """Asked the customer to enter a new trip
 
-
     >>> enter_trip_details(input_func1 = lambda:"11-05-2014", input_func2 = lambda: 452, input_func3 = lambda: 38)
     <BLANKLINE>
     Enter the date of your trip(dd-mm-yyyy):Enter the length of your trip:Enter the fuel consumption:['11-05-2014', 452, 38]
@@ -108,7 +107,7 @@ def enter_trip_details(input_func1=input, input_func2=input, input_func3=input):
     return [date, length, coefficient]
 
 
-def print_record(record, used_fuel = -1):
+def print_record(record, used_fuel=-1):
     """Print record on the screen
 
     >>> from model import Record
@@ -163,6 +162,3 @@ def invalid_value():
     """
     print("Invalid values entered")
 
-#if __name__ == "__main__":
-#    import doctest
-#    doctest.testmod()

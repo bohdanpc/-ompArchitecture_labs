@@ -31,7 +31,7 @@ def initialise(file_name):
 def save_all(records, file_name):
     """Saves list of all values to file"""
     with open(file_name, 'wb') as f:
-        _pickle.dump(records, f, _pickle.HIGHEST_PROTOCOL)
+        _pickle.dump(records, f)
     f.close()
 
 
@@ -76,35 +76,21 @@ def check_validity_of_date(date):
         return False
 
 
-def check_validity_of_length(length):
-    """Returns 'True' if length is valid or 'False' otherwise
+def check_validity(item):
+    """check validity of date, length and coefficent input
 
-    >>> check_validity_of_length(128)
-    True
-    >>> check_validity_of_length('12h')
+    >>> check_validity(["12-35-2012", 125, 12])
     False
-    >>> check_validity_of_length('12')
+    >>> check_validity(["12-10-1996", 123, 10.5])
     True
+    >>> check_validity(["10-09-2015", "12", 10])
+    True
+    >>> check_validity(["5-4-2014", 53.2, "152b"])
     """
     try:
-        float(length)
-        return True
-    except:
-        return False
-
-
-def check_validity_of_coefficient(coefficient):
-    """Returns 'True' if coefficient is valid or 'False' otherwise
-
-    >>> check_validity_of_coefficient(27)
-    True
-    >>> check_validity_of_coefficient('Invalid')
-    False
-    >>> check_validity_of_coefficient('128')
-    True
-    """
-    try:
-        float(coefficient)
+        check_validity_of_date(item[0])
+        item[1] = float(item[1])
+        item[2] = float(item[2])
         return True
     except:
         return False
@@ -164,8 +150,6 @@ def find_by_date_range(records, first_date, second_date):
             continue
         else:
             items.append(item)
-    if not items:
-        return False
     return items
 
 
@@ -201,8 +185,3 @@ def get_general_fuel_used(records):
         res += get_used_fuel(item)
     return res
 
-#
-#if __name__ == "__main__":
-#    import doctest
-
-#    doctest.testmod()
