@@ -1,6 +1,7 @@
 import view
 import model
 from model import Record
+import serialize
 
 
 def show_all(records):
@@ -165,7 +166,8 @@ def main_func(input_func1=input):
     """
 
     choice = ''
-    records = model.initialise("fuel_consumption.pickle")
+    records = serialize.Serialize.load("base")
+
     while choice != "7":
         choice = str(view.menu(input_func1))
         if choice == "1":
@@ -181,7 +183,8 @@ def main_func(input_func1=input):
         elif choice == "6":
             add_record(records)
         elif choice == "7":
-            model.save_all(records, "fuel_consumption.pickle")
+            serialize.Serialize.save("base", records)
+            # model.save_all(records, "fuel_consumption.pickle")
 
 
 main_func()

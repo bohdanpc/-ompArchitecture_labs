@@ -29,13 +29,6 @@ def initialise(file_name):
         return []
 
 
-def save_all(records, file_name):
-    """Saves list of all values to file"""
-    with open(file_name, 'wb') as f:
-        _pickle.dump(records, f)
-    f.close()
-
-
 def check_validity_of_date(date):
     """Returns 'True' if date is valid or 'False' otherwise
 
@@ -193,3 +186,10 @@ def get_general_fuel_used(records):
     for item in records:
         res += get_used_fuel(item)
     return res
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+
