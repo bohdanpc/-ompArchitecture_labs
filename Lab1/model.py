@@ -1,6 +1,5 @@
 import _pickle
 from _datetime import datetime
-import json
 
 
 class Record(object):
@@ -20,9 +19,6 @@ class Record(object):
 
     def __eq__(self, other):
         return self.date == other.date and self.length == other.length and self.coefficient == other.coefficient
-
-    def __repr__(self):
-        return json.dumps(self.__dict__)
 
 
 def initialise(file_name):

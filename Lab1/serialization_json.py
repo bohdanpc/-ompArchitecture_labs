@@ -8,7 +8,7 @@ class JsonSerializer:
         Encode obj to yaml format and write it into file.
         """
 
-        json.dump(data.__repr__(), file)
+        json.dump(data.__dict__, file)
 
     def deserialize(self, file):
         """
