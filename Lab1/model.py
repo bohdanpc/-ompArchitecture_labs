@@ -6,16 +6,16 @@ class Record(object):
     """Class that represents container for length of the way, date and fuel
     coefficient """
 
-    def __init__(self, _date, _length, _coefficient):
+    def __init__(self, date, length, coefficient):
         """Class ctor
 
         >>> rec = Record("12-01-2017",125.50,3.14198)
         >>> [rec.date,rec.length,rec.coefficient]
         ['12-01-2017', 125.5, 3.14198]
         """
-        self.date = _date
-        self.length = _length
-        self.coefficient = _coefficient
+        self.date = date
+        self.length = length
+        self.coefficient = coefficient
 
 
 def initialise(file_name):
@@ -55,9 +55,9 @@ def check_validity_of_date(date):
     >>> check_validity_of_date("29-02-2016")
     True
     """
-    tmp = date.split('-')
+    values = date.split('-')
     try:
-        day, month, year = int(tmp[0]), int(tmp[1]), int(tmp[2])
+        day, month, year = int(values[0]), int(values[1]), int(values[2])
         if month == 2:
             if year % 4 == 0 and day < 30:
                 return True
@@ -66,7 +66,7 @@ def check_validity_of_date(date):
         elif month > 12 or day > 31 or (month in (4, 6, 9, 11) and day > 30):
             return False
         return True
-    except:
+    except Exception:
         return False
 
 
@@ -93,24 +93,24 @@ def check_validity(item):
 
 
 def compare_date(first_date, second_date):
-    """Returns '0', '1' or '-1' dependent on equality of parameters
+    """Returns '0', '1' or '2' dependent on equality of parameters
 
     >>> compare_date("12-12-12","12-12-2017")
-    -1
-    >>> compare_date("12-12-2017","12-12-12")
-    1
-    >>> compare_date("12-12-2017","12-12-2017")
     0
+    >>> compare_date("12-12-2017","12-12-12")
+    2
+    >>> compare_date("12-12-2017","12-12-2017")
+    1
     """
     first = first_date.split('-')
     second = second_date.split('-')
     first = datetime(int(first[2]), int(first[1]), int(first[0]))
     second = datetime(int(second[2]), int(second[1]), int(second[0]))
     if first < second:
-        return -1
-    elif first == second:
         return 0
-    return 1
+    elif first == second:
+        return 1
+    return 2
 
 
 def find_by_date(records, date):
@@ -145,8 +145,8 @@ def find_by_date_range(records, first_date, second_date):
     """
     items = []
     for item in records:
-        if compare_date(item.date, first_date) == -1 or \
-                        compare_date(item.date, second_date) == 1:
+        if compare_date(item.date, first_date) == 0 or \
+                        compare_date(item.date, second_date) == 2:
             continue
         else:
             items.append(item)
