@@ -17,6 +17,9 @@ class Record(object):
         self.length = length
         self.coefficient = coefficient
 
+    def __eq__(self, other):
+        return self.date == other.date and self.length == other.length and self.coefficient == other.coefficient
+
 
 def initialise(file_name):
     """Returns list of values we've already added"""
@@ -190,6 +193,5 @@ def get_general_fuel_used(records):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
-
-
