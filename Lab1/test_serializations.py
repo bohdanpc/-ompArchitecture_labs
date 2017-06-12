@@ -26,16 +26,16 @@ class PickleTest(unittest.TestCase):
         outfile.close()
         self.assertEqual(content, self.data)
 
-
-class YamlTest(unittest.TestCase):
-    def setUp(self):
-        self.data = model.Record("12-01-2017", 125.50, 3.14198)
+    class YamlTest(unittest.TestCase):
+        def setUp(self):
+            self.data = model.Record("12-01-2017", 125.50, 3.14198)
 
     def test_yaml_save(self):
         outfile = StringIO()
         serialization_yaml.YAMLSerializer().serialize(self.data, outfile)
         outfile.seek(0)
         content = outfile.getvalue()
+        print(content)
         outfile.close()
         self.assertEqual(content, self.data)
 
@@ -50,14 +50,15 @@ class YamlTest(unittest.TestCase):
 class JsonTest(unittest.TestCase):
     def setUp(self):
         self.data = model.Record("12-01-2017", 125.50, 3.14198)
-        self.expected = '"{\\"date\\": \\"12-01-2017\\", \\"length\\": 125.5, \\"coefficient\\": 3.14198}"'
+        # self.expected = '"{\\"date\\": \\"12-01-2017\\", \\"length\\": 125.5, \\"coefficient\\": 3.14198}"'
+        self.expected = {"date": "12-01-2017", "length": 125.5, "coefficient": 3.14198}
 
     def test_json_save(self):
         outfile = StringIO()
         serialization_json.JsonSerializer().serialize(self.data, outfile)
         content = outfile.getvalue()
         outfile.close()
-        self.assertEqual(content, str(self.expected))
+        self.assertEqual(content, '{"date": "12-01-2017", "length": 125.5, "coefficient": 3.14198}')
 
     def test_json_read(self):
         outfile = StringIO()
@@ -65,7 +66,7 @@ class JsonTest(unittest.TestCase):
         outfile.seek(0)
         content = serialization_json.JsonSerializer().deserialize(outfile)
         outfile.close()
-        self.assertEqual(content, '{"date": "12-01-2017", "length": 125.5, "coefficient": 3.14198}')
+        self.assertEqual(content, self.expected)
 
 
 if __name__ == '__main__':
