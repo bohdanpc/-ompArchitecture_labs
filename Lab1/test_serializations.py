@@ -48,14 +48,15 @@ class YamlTest(unittest.TestCase):
 
 class JsonTest(unittest.TestCase):
     def setUp(self):
-        self.data = model.Record("12-01-2017", 125.50, 3.14198)
+        self.data = []
+        self.data.append(model.Record("12-01-2017", 125.50, 3.14198))
 
     def test_json_save(self):
         outfile = StringIO()
         serialization_json.JsonSerializer().serialize(self.data, outfile)
         content = outfile.getvalue()
         outfile.close()
-        self.assertEqual(content, [{"coefficient": 3.14198, "date": "12-01-2017", "length": 125.50}])
+        self.assertEqual(content, [{'coefficient': 3.14198, 'date': '12-01-2017', 'length': 125.50}])
 
     def test_json_read(self):
         outfile = StringIO()
