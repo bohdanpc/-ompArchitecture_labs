@@ -26,9 +26,10 @@ class PickleTest(unittest.TestCase):
         outfile.close()
         self.assertEqual(content, self.data)
 
-    class YamlTest(unittest.TestCase):
-        def setUp(self):
-            self.data = model.Record("12-01-2017", 125.50, 3.14198)
+
+class YamlTest(unittest.TestCase):
+    def setUp(self):
+        self.data = model.Record("12-01-2017", 125.50, 3.14198)
 
     def test_yaml_save(self):
         outfile = StringIO()
