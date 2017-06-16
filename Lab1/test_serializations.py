@@ -37,6 +37,7 @@ class YamlTest(unittest.TestCase):
         outfile.seek(0)
         content = outfile.getvalue()
         print(content)
+        print(self.data)
         outfile.close()
         self.assertEqual(content, self.data)
 
