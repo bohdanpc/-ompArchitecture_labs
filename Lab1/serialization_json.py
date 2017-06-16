@@ -1,5 +1,4 @@
 import json
-import model
 
 
 class JsonSerializer:
