@@ -23,13 +23,32 @@ class Model:
 
     def __init__(self, file_name):
         """Returns list of values we've already added"""
+        self.i = 0
         try:
             with open(file_name, 'rb') as f:
                 records = pickle.load(f)
                 f.close()
             self.records = records
+            self.max = records.__len__()
         except Exception:
             self.records = []
+            self.max = 0
+
+    # class ModelIterator:
+    # def __init__(self, n):
+    #     self.i = 0
+    #     self.n = n
+
+    def __iter__(self):
+        return self.records
+
+    def next(self):
+        if self.i < self.max:
+            i = self.i
+            self.i += 1
+            return self.records[i]
+        else:
+            raise StopIteration()
 
     def check_validity_of_date(self, date):
         """Returns 'True' if date is valid or 'False' otherwise
