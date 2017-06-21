@@ -10,7 +10,7 @@ class Model:
         def __init__(self, date, length, coefficient):
             """Class ctor
 
-            >>> rec = Record("12-01-2017",125.50,3.14198)
+            >>> rec = Model.Record("12-01-2017",125.50,3.14198)
             >>> [rec.date,rec.length,rec.coefficient]
             ['12-01-2017', 125.5, 3.14198]
             """
@@ -19,7 +19,8 @@ class Model:
             self.coefficient = coefficient
 
         def __eq__(self, other):
-            return self.date == other.date and self.length == other.length and self.coefficient == other.coefficient
+            return self.date == other.date and self.length == other.length and\
+                   self.coefficient == other.coefficient
 
     def __init__(self, file_name):
         """Returns list of values we've already added"""
@@ -92,16 +93,17 @@ class Model:
         except Exception:
             return False
 
+    @staticmethod
     def check_validity(self, item):
         """check validity of date, length and coefficent input
 
-        >>> check_validity(["12-35-2012", 125, 12])
+        >>> Model.check_validity(["12-35-2012", 125, 12])
         False
-        >>> check_validity(["12-10-1996", 123, 10.5])
+        >>> Model.check_validity(["12-10-1996", 123, 10.5])
         True
-        >>> check_validity(["10-09-2015", "12", 10])
+        >>> Model.check_validity(["10-09-2015", "12", 10])
         True
-        >>> check_validity(["5-04-2014", 53.2, "152b"])
+        >>> Model.check_validity(["5-04-2014", 53.2, "152b"])
         False
         """
         if not self.check_validity_of_date(item[0]):
@@ -133,37 +135,21 @@ class Model:
             return 1
         return 2
 
+    @staticmethod
     def find_by_date(self, date):
-        """Returns list of items by date or 'False' otherwise
-
-        >>> l=[Record("12-01-2017",125,3.14), Record("12-03-2017",250,14.20),\
-        Record("12-03-2017",456,55.11)]
-        >>> result = find_by_date(l,"12-03-2017")
-        >>> result[0].length
-        250
-        >>> result[1].length
-        456
-        """
+        """Returns list of items by date or 'False' otherwise"""
         items = []
         for item in self.records:
             if item.date == date:
                 items.append(item)
         return items
 
-    def find_by_date_range(self, records, first_date, second_date):
-        """Returns list of items chosen by date in date range or 'False' otherwise
-
-        >>> l=[Record("12-01-2017",125,3.14), Record("12-02-2017",250,14.20),\
-         Record("12-03-2017",456,55.11), Record("12-04-2017",887,15), \
-         Record("12-05-2017",337,1.08), Record("12-06-2017",225,0.75)]
-        >>> result = find_by_date_range(l,"01-03-2017","22-05-2017")
-        >>> result[0].length
-        456
-        >>> result[1].length
-        887
-        """
+    @staticmethod
+    def find_by_date_range(self, first_date, second_date):
+        """Returns list of items chosen by date in date
+        range or 'False' otherwise"""
         items = []
-        for item in records:
+        for item in self.records:
             if self.compare_date(item.date, first_date) == 0 or \
                             self.compare_date(item.date, second_date) == 2:
                 continue
@@ -172,37 +158,24 @@ class Model:
         return items
 
     def get_used_fuel(self, record):
-        """Returns value of used fuel by given record
-
-        >>> get_used_fuel(Record("12-03-2017",200,10))
-        20.0
-        """
         return (record.coefficient * record.length) / 100
 
-    def get_general_length(self, records):
-        """Returns all length we've passed through
-
-        >>> get_general_length([Record("12-03-2017",300,10),\
-        Record("12-03-2017",100,20)])
-        400
-        """
+    def get_general_length(self):
         res = 0
-        for item in records:
+        for item in self.records:
             res += item.length
         return res
 
-    def get_general_fuel_used(self, records):
-        """Returns all fuel we've spent
-
-        >>> get_general_fuel_used([Record("12-03-2017",300,10),\
-         Record("12-03-2017",100,20)])
-        50.0
-        """
+    def get_general_fuel_used(self):
         res = 0
-        for item in records:
+        for item in self.records:
             res += self.get_used_fuel(item)
         return res
 
+    def add_data(self, date, length, coefficient):
+        item_list = [date, length, coefficient]
+        if Model.check_validity(self, item_list):
+            self.records.append(Model.Record(item_list[0], item_list[1], item_list[2]))
 
 if __name__ == "__main__":
     import doctest
