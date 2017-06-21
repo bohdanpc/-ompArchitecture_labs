@@ -32,6 +32,12 @@ class Model:
         except Exception:
             self.records = []
 
+    def save_all(self, file_name):
+        """Saves list of all values to file"""
+        with open(file_name, 'wb') as f:
+            pickle.dump(self.records, f)
+
+
     def __iter__(self):
         return self.ModelIterator(self, self.records.__len__())
 
@@ -135,7 +141,6 @@ class Model:
             return 1
         return 2
 
-    @staticmethod
     def find_by_date(self, date):
         """Returns list of items by date or 'False' otherwise"""
         items = []
@@ -157,7 +162,8 @@ class Model:
                 items.append(item)
         return items
 
-    def get_used_fuel(self, record):
+    @staticmethod
+    def get_used_fuel(record):
         return (record.coefficient * record.length) / 100
 
     def get_general_length(self):

@@ -6,7 +6,6 @@ import view
 
 class KeysController:
     consump = model.Model("base.pickle")
-    records = serialize.Serialize.load("base")
 
     parser = argparse.ArgumentParser(description='Keys controller for Fuel Consumption.')
 
@@ -37,21 +36,21 @@ class KeysController:
         elif self.args.date:
             self.show_by_date()
         elif self.args.print:
-            self.show_all_info()
+            self.show_all_info(self.consump.records)
 
     def add_info(self):
         self.consump.add_data(self.args.d, self.args.l, self.args.c)
-        serialize.Serialize.save("base", self.records)
+        self.consump.save_all("base.pickle")
 
     def show_by_date(self):
         if self.consump.check_validity_of_date(self.args.date):
-            records_daily = model.Model.find_by_date\
-                (self.records, self.args.date)
+            records_daily = self.consump.find_by_date(self.args.date)
             KeysController.show_all_info(records_daily)
 
-    def show_all_info(self):
-        for item in self.consump.records:
-            view.View.print_record(item, self.consump.get_used_fuel(item))
+    @staticmethod
+    def show_all_info(records_list):
+        for item in records_list:
+            view.View.print_record(item, model.Model.get_used_fuel(item))
 
 if __name__ == "__main__":
     k = KeysController()
