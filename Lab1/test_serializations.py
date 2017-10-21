@@ -8,7 +8,7 @@ import model
 
 class PickleTest(unittest.TestCase):
     def setUp(self):
-        self.data = model.Record("12-01-2017", 125.50, 3.14198)
+        self.data = model.Model.Record("12-01-2017", 125.50, 3.14198)
 
     def test_pickle_save(self):
         outfile = BytesIO()
@@ -47,7 +47,7 @@ class YamlTest(unittest.TestCase):
 
 class JsonTest(unittest.TestCase):
     def setUp(self):
-        self.data = model.Record("12-01-2017", 125.50, 3.14198)
+        self.data = model.Model.Record("12-01-2017", 125.50, 3.14198)
         self.expected = {"date": "12-01-2017", "length": 125.5, "coefficient": 3.14198}
 
     def test_json_save(self):
@@ -55,7 +55,7 @@ class JsonTest(unittest.TestCase):
         serialization_json.JsonSerializer().serialize(self.data, outfile)
         outfile.seek(0)
         resdict = serialization_json.JsonSerializer().deserialize(outfile)
-        result=model.Record(resdict["date"],resdict["length"],resdict["coefficient"])
+        result=model.Model.Record(resdict["date"],resdict["length"],resdict["coefficient"])
         self.assertEqual(result, self.data)
 
     def test_json_read(self):

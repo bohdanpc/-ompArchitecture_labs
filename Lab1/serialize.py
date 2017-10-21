@@ -52,7 +52,7 @@ class JsonSerialize:
             data = json.load(f)
             res_db = []
             for elem in data:
-                res_db.append(model.Record(elem["date"],
+                res_db.append(model.Model.Record(elem["date"],
                                            elem["length"],
                                            elem["coefficient"]))
             return res_db
