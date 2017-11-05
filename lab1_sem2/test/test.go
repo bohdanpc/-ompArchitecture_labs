@@ -22,6 +22,6 @@ func main() {
 	auto := mytree.Find(boook)
 	mytree.Erase(auto)
 
-	fmt.Println("Tree after calling Erase fuction:")
+	fmt.Println("\nTree after calling Erase fuction:\n")
 	mytree.Print()
 }
