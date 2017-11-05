@@ -4,7 +4,6 @@ import (
 	"testing"
 	"../book"
     "../tree"
-    //"fmt"
 )
 
 
@@ -67,5 +66,17 @@ func TestErase(t *testing.T) {
 
 	if bookFound != nil {
 		t.Errorf("Erase wasn't complete succesfully")
+	}
+}
+
+func TestAdd(t *testing.T) {
+	mytree := new(tree.Tree)
+	mytree.Add(book.Book{"Robinsone Crusoe", "Daniel Defoe"})
+	mytree.Add(book.Book{"Nine Princes in Amber", "Roger Zelyazny"})
+	book1 := book.Book{"The Song of Ice and Fire", "Gourge Martine"}
+	mytree.Add(book1);
+	bookFound := mytree.Find(book1)
+	if bookFound == nil {
+		t.Errorf("Addition wasn't complete succesfully")
 	}
 }
