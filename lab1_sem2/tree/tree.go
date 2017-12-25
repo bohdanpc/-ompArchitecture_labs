@@ -2,6 +2,10 @@ package tree
 
 import (
 	"fmt"
+	"bufio"
+	"os"
+	"strings"
+	"log"
 )
 
 type Abstract interface {
@@ -133,4 +137,26 @@ func (t *Tree) printTree(p *Node, depth int) {
 
 func (t *Tree) Print() {
 	t.printTree(t.root, 0)
+}
+
+func (t *Tree) AddFromFile() {
+	file, err := os.Open("/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/info.dat")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+
+		ucl := strings.ToUpper(scanner.Text())
+			fmt.Println(ucl)
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
+		os.Exit(1)
+	}
 }

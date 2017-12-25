@@ -6,6 +6,12 @@ import (
 	"fmt"
 )
 
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 func main() {
 
 	mytree := new(tree.Tree)
@@ -23,5 +29,9 @@ func main() {
 	mytree.Erase(auto)
 
 	fmt.Println("\nTree after calling Erase fuction:\n")
+
+	//mytree.AddFromFile()
+	book.AddFromCsvFile(mytree, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/foreign_names (copy).csv")
 	mytree.Print()
 }

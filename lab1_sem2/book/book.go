@@ -1,6 +1,13 @@
 package book
 
-import "../tree"
+import (
+	"../tree"
+	"os"
+	"log"
+	"encoding/csv"
+	"bufio"
+	"io"
+)
 
 type Book struct {
 	Name, Author string
@@ -20,4 +27,28 @@ func (b Book) GetAuthor() string {
 
 func (b Book) GetName() string {
 	return b.Name
+}
+
+func AddFromCsvFile(t *tree.Tree, fileName string) {
+	csvFile, err := os.Open(fileName)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer csvFile.Close()
+
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+
+		t.Add(Book{string(line[0]), string(line[1])})
+		//fmt.Println(string(line[0]))
+		//fmt.Println(string(line[1]))
+	}
 }

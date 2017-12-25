@@ -46,6 +46,9 @@ func TestFind(t *testing.T) {
 	mytree.Add(book.Book{"Nine Princes in Amber", "Roger Zelyazny"})
 	mytree.Add(book.Book{"The Chronicles of Amber", "Roger Zelyazny"})
 
+	book.AddFromCsvFile(mytree, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/books.csv")
+
 	book1 := book.Book{"Robinsone Crusoe", "Daniel Defoe"}
 	bookNode := mytree.Find(book1)
 	//*bookNode.data.GetName()
@@ -60,23 +63,19 @@ func TestErase(t *testing.T) {
 	mytree.Add(book.Book{"Nine Princes in Amber", "Roger Zelyazny"})
 	book1 := book.Book{"The Song of Ice and Fire", "Gourge Martine"}
 	mytree.Add(book1);
-	bookFound := mytree.Find(book1)
-	mytree.Erase(bookFound)
-	bookFound = mytree.Find(book1)
+	book.AddFromCsvFile(mytree, "/home/thereptile/"+
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/books.csv")
 
-	if bookFound != nil {
-		t.Errorf("Erase wasn't complete succesfully")
-	}
+	book2 := book.Book{"Robinsone Crusoe", "Daniel Defoe"}
+	bookNode := mytree.Find(book2)
+	mytree.Erase(bookNode)
 }
 
 func TestAdd(t *testing.T) {
 	mytree := new(tree.Tree)
 	mytree.Add(book.Book{"Robinsone Crusoe", "Daniel Defoe"})
 	mytree.Add(book.Book{"Nine Princes in Amber", "Roger Zelyazny"})
-	book1 := book.Book{"The Song of Ice and Fire", "Gourge Martine"}
-	mytree.Add(book1);
-	bookFound := mytree.Find(book1)
-	if bookFound == nil {
-		t.Errorf("Addition wasn't complete succesfully")
-	}
+
+	book.AddFromCsvFile(mytree, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/books.csv")
 }
