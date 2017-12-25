@@ -19,7 +19,7 @@ func main() {
 	mytree.Print()
 
 	boook = book.Book{"Robinsone Crusoe", "Daniel Defoe"}
-	auto := mytree.Find(boook)
+	auto := mytree.FindRec(boook)
 	mytree.Erase(auto)
 
 	fmt.Println("Tree after calling Erase fuction:")

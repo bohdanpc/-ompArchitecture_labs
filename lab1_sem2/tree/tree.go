@@ -90,36 +90,53 @@ func (t *Tree) Erase(p *Node) {
 }
 
 func (t *Tree) Find(abstract Abstract) *Node {
-	tmp := t.root
-	for !tmp.Data.Equals(abstract) {
-		if tmp.Data.Less(abstract) {
-			tmp = tmp.left
+	ptr := t.root
+	for !ptr.Data.Equals(abstract) {
+		if ptr.Data.Less(abstract) {
+			ptr = ptr.left
 		} else {
-			tmp = tmp.right
+			ptr = ptr.right
 		}
-		if tmp == nil {
-			return tmp
+		if ptr == nil {
+			return ptr
 		}
 	}
-	return tmp
+	return ptr
+}
+
+func (ptr *Node) findRec(abstract Abstract) *Node {
+	if ptr.Data.Equals(abstract) {
+		return ptr
+	}
+	if nil != ptr.left && nil != ptr.left.findRec(abstract) {
+		return ptr.left.findRec(abstract)
+	}
+	if nil != ptr.right && nil != ptr.right.findRec(abstract) {
+		return ptr.right.findRec(abstract)
+	}
+	return nil
+}
+
+func (t *Tree) FindRec(abstract Abstract) *Node {
+	return t.root.findRec(abstract)
 }
 
 func (t *Tree) min(p *Node) *Node {
 	if p.left != nil {
-		tmp := p.left
-		for ; tmp.left != nil; tmp = tmp.left {
+		ptr := p.left
+		for ; ptr.left != nil; ptr = ptr.left {
 		}
-		return tmp
+		return ptr
 	}
 	return p
 }
 
 func (t *Tree) max(p *Node) *Node {
 	if p.right != nil {
-		tmp := p.right
-		for ; tmp.right != nil; tmp = tmp.right {
+		ptr := p.right
+		for ; ptr.right != nil; ptr = ptr.right {
 		}
-		return tmp
+		return ptr
 	}
 	return p
 }
