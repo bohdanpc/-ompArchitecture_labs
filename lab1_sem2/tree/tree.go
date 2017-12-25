@@ -89,34 +89,6 @@ func (t *Tree) Erase(p *Node) {
 	}
 }
 
-/*
-if p.parent.left == p {
-				p.parent.left = nil
-			} else {
-				p.parent.right = nil
-			}
-			p.parent = nil
-
-if ptr == ptr.parent.right {
-ptr.parent.right = ptr.left
-} else {
-ptr.parent.left = ptr.left
-}
-if ptr.left != nil {
-ptr.left.parent = ptr.parent
-}
-
-if ptr == ptr.parent.left {
-				ptr.parent.left = ptr.right
-			} else {
-				ptr.parent.right = ptr.right
-			}
-			if ptr.right != nil {
-				ptr.right.parent = ptr.parent
-			}
-
-*/
-
 func (t *Tree) Find(abstract Abstract) *Node {
 	tmp := t.root
 	for !tmp.Data.Equals(abstract) {
