@@ -48,7 +48,50 @@ func AddFromCsvFile(t *tree.Tree, fileName string) {
 		}
 
 		t.Add(Book{string(line[0]), string(line[1])})
-		//fmt.Println(string(line[0]))
-		//fmt.Println(string(line[1]))
+	}
+}
+
+
+func AddFromCsvFileRecBalance(t *tree.Tree, fileName string) {
+	csvFile, err := os.Open(fileName)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer csvFile.Close()
+
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+
+		t.AddRecBalance(Book{string(line[0]), string(line[1])})
+	}
+}
+
+func AddFromCsvFileRec(t *tree.Tree, fileName string) {
+	csvFile, err := os.Open(fileName)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer csvFile.Close()
+
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+
+		t.AddRec(Book{string(line[0]), string(line[1])})
 	}
 }

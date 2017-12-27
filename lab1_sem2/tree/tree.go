@@ -2,10 +2,6 @@ package tree
 
 import (
 	"fmt"
-	"bufio"
-	"os"
-	"strings"
-	"log"
 )
 
 type Abstract interface {
@@ -18,10 +14,112 @@ type Abstract interface {
 type Node struct {
 	left, right, parent *Node
 	Data Abstract
+	height int
 }
 
 type Tree struct {
 	root *Node
+}
+
+func getHeight(p *Node) int {
+	if p == nil {
+		return 0
+	}
+	return p.height
+}
+
+func getBalanceFactor(p *Node) int {
+	return getHeight(p.right) - getHeight(p.left)
+}
+
+func fixHeight(p *Node) {
+	leftInt := getHeight(p.right)
+	rightInt := getHeight(p.left)
+
+	if leftInt > rightInt {
+		p.height = leftInt + 1
+	} else {
+		p.height = rightInt + 1
+	}
+}
+
+func rotateRight(p *Node) *Node {
+	q := p.left
+	p.left = q.right
+	q.right = p
+	fixHeight(p)
+	fixHeight(q)
+	return q
+}
+
+func rotateLeft(q *Node) *Node {
+	p := q.right
+	q.right = p.left
+	p.left = q
+	fixHeight(p)
+	fixHeight(q)
+	return p
+}
+
+func balance(p *Node) *Node {
+    fixHeight(p)
+    if getBalanceFactor(p) == 2 {
+    	if getBalanceFactor(p.right) < 0 {
+    		p.right = rotateRight(p.right)
+		}
+		return rotateLeft(p)
+	}
+	if getBalanceFactor(p) == -2 {
+		if getBalanceFactor(p.left) > 0 {
+			p.left = rotateLeft(p.left)
+		}
+		return rotateRight(p)
+	}
+	return p
+}
+
+func addToNodeRec(p *Node, field Abstract) *Node{
+	if p == nil {
+		p = new(Node)
+		p.Data = field
+		p.height = 1
+		p.left = nil
+		p.right = nil
+		p.parent = p
+		return p
+	}
+	if p.Data.Less(field) {
+		p.left = addToNodeRec(p.left, field)
+	} else {
+		p.right = addToNodeRec(p.right, field)
+	}
+	return p
+}
+
+func addToNodeRecBalance(p *Node, field Abstract) *Node{
+    if p == nil {
+    	p = new(Node)
+    	p.Data = field
+    	p.height = 1
+    	p.left = nil
+    	p.right = nil
+    	p.parent = p
+    	return p
+	}
+	if p.Data.Less(field) {
+		p.left = addToNodeRecBalance(p.left, field)
+	} else {
+		p.right = addToNodeRecBalance(p.right, field)
+	}
+	return balance(p)
+}
+
+func (t *Tree) AddRecBalance(field Abstract) {
+	t.root = addToNodeRecBalance(t.root, field)
+}
+
+func (t *Tree) AddRec(field Abstract) {
+	t.root = addToNodeRec(t.root, field)
 }
 
 func (t *Tree) Add(field Abstract) {
@@ -54,7 +152,49 @@ func (t *Tree) Add(field Abstract) {
 	}
 }
 
+
+func (ptr *Node) excludeChildrenTo(what *Node) {
+	if ptr == ptr.parent.right {
+		ptr.parent.right = what
+	} else {
+		ptr.parent.left = what
+	}
+	if what != nil {
+		what.parent = ptr.parent
+	}
+}
+
+
+func (ptr *Node) excludeParent() {
+	if ptr == ptr.parent.right {
+		ptr.parent.right = nil
+	} else {
+		ptr.parent.left = nil
+	}
+	ptr.parent = nil
+}
+
+
+
+
 func (t *Tree) Erase(p *Node) {
+	if p.left != nil {
+		ptr := t.max(p.left)
+		p.Data = ptr.Data
+		ptr.excludeChildrenTo(ptr.left)
+	} else {
+		if p.right == nil {
+			p.excludeParent()
+		} else {
+			ptr := t.min(p.right)
+			p.Data = ptr.Data
+			ptr.excludeChildrenTo(ptr.right)
+		}
+	}
+}
+
+
+func (t *Tree) ErasePrev(p *Node) {
 	if p.left != nil {
 		tmp := t.max(p.left)
 		p.Data = tmp.Data
@@ -104,6 +244,24 @@ func (t *Tree) Find(abstract Abstract) *Node {
 	return tmp
 }
 
+
+func findRec(abstract Abstract, p *Node) *Node {
+	if p == nil || p.Data.Equals(abstract) {
+		return p
+	}
+	if p.Data.Less(abstract) {
+		return findRec(abstract, p.left)
+	} else {
+		return findRec(abstract, p.right)
+	}
+}
+
+
+func (t *Tree) FindRec(abstract Abstract) *Node {
+	return findRec(abstract, t.root)
+}
+
+
 func (t *Tree) min(p *Node) *Node {
 	if p.left != nil {
 		tmp := p.left
@@ -137,26 +295,4 @@ func (t *Tree) printTree(p *Node, depth int) {
 
 func (t *Tree) Print() {
 	t.printTree(t.root, 0)
-}
-
-func (t *Tree) AddFromFile() {
-	file, err := os.Open("/home/thereptile/" +
-		"GoglandProjects/CompArchitecture_labs/lab1_sem2/info.dat")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-
-		ucl := strings.ToUpper(scanner.Text())
-			fmt.Println(ucl)
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, "error:", err)
-		os.Exit(1)
-	}
 }
