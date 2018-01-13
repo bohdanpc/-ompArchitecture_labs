@@ -410,3 +410,39 @@ func (t *Tree) DfsParalel() {
 	go dfsParalel(pRight1.right, "/home/thereptile/" +
 		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine4.dat")
 }
+
+
+func walkImpl(pRoot *Node, ch chan Abstract) {
+	if pRoot == nil {
+		return
+	}
+	walkImpl(pRoot.left, ch)
+	ch <- pRoot.Data
+	walkImpl(pRoot.right, ch)
+}
+
+// Walk walks the tree t sending all values
+// from the tree to the channel ch.
+func (t *Tree) Walk(ch chan Abstract) {
+	walkImpl(t.root, ch)
+	// Need to close the channel here
+	close(ch)
+}
+
+func (t *Tree) Same(t2 *Tree) bool {
+	w1, w2 := make(chan Abstract), make(chan Abstract)
+
+	go t.Walk(w1)
+	go t2.Walk(w2)
+
+	for {
+		v1, ok1 := <-w1
+		v2, ok2 := <-w2
+		if !ok1 || !ok2 {
+			return ok1 == ok2
+		}
+		if v1 != v2 {
+			return false
+		}
+	}
+}

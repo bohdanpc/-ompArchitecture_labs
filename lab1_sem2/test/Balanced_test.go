@@ -50,7 +50,14 @@ func TestAddRecBalance(t *testing.T) {
 		"GoglandProjects/CompArchitecture_labs/lab1_sem2/books.csv")
 
 	mytreeBalanced.AddRecBalance(book.Book{"MANKIND REVOLUTION", "CRUEL MAMBY"})
+}
+
+func TestEquality(t *testing.T) {
+	result := mytreeBalanced.Same(mytreeBalanced)
+	if (result != true) {
+		t.Errorf("Expected to trees to be the same\n")
 	}
+}
 
 func TestBfsParalel(t *testing.T) {
 	mytreeBalanced.BfsParalel()
