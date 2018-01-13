@@ -52,6 +52,23 @@ func TestAddRecBalance(t *testing.T) {
 	mytreeBalanced.AddRecBalance(book.Book{"MANKIND REVOLUTION", "CRUEL MAMBY"})
 	}
 
+func TestBfsParalel(t *testing.T) {
+	mytreeBalanced.BfsParalel()
+	tree.Wg.Wait()
+}
+
+func TestBfsCasual(t *testing.T) {
+	mytreeBalanced.Bfs()
+}
+
+func TestDfsParalel(t *testing.T) {
+	mytreeBalanced.DfsParalel()
+	tree.Wg.Wait()
+}
+
+func TestDfsCasual(t *testing.T) {
+	mytreeBalanced.Dfs()
+}
 
 
 func TestFindBalance(t *testing.T) {
@@ -70,3 +87,5 @@ func TestEraseBalanced(t *testing.T) {
 	bookNode := mytreeBalanced.Find(book1)
 	mytreeBalanced.Erase(bookNode)
 }
+
+

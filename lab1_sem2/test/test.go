@@ -4,6 +4,8 @@ import (
 	"../book"
 	"../tree"
 	//"fmt"
+	"fmt"
+	"time"
 )
 
 func check(e error) {
@@ -15,14 +17,21 @@ func check(e error) {
 func main() {
 
 	mytree := new(tree.Tree)
+	mytree.AddRec(book.Book{"The Chronicles of Amber", "Roger Zelyazny"})
 	mytree.AddRec(book.Book{"Robinsone Crusoe", "Daniel Defoe"})
 	mytree.AddRec(book.Book{"Tine Princes in Amber", "Roger Zelyazny"})
-	mytree.AddRec(book.Book{"The Chronicles of Amber", "Roger Zelyazny"})
 	boook := book.Book{"The Song of Ice and Fire", "Gourge Martine"}
 	mytree.AddRec(boook)
 	mytree.AddRec(book.Book{"Traph Monte-Kristo", "Daniel Defoe"})
 	mytree.AddRec(book.Book{"The Dark Tower", "Stephen King"})
 	mytree.Print()
+
+	fmt.Println("----BFS WILL BE HERE-----")
+	mytree.Bfs()
+	fmt.Println("----BFS PARALEL----")
+	mytree.BfsParalel()
+
+	time.Sleep(1000 * time.Millisecond)
 
 	boook = book.Book{"Robinsone Crusoe", "Daniel Defoe"}
 	auto := mytree.Find(boook)

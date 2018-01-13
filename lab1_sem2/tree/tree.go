@@ -2,7 +2,13 @@ package tree
 
 import (
 	"fmt"
+	"container/list"
+	"sync"
+	"os"
 )
+
+const GoRoutinesCount = 4
+var Wg sync.WaitGroup
 
 type Abstract interface {
 	GetName() string
@@ -21,25 +27,25 @@ type Tree struct {
 	root *Node
 }
 
-func getHeight(p *Node) int {
-	if p == nil {
+func getHeight(pNode *Node) int {
+	if pNode == nil {
 		return 0
 	}
-	return p.height
+	return pNode.height
 }
 
-func getBalanceFactor(p *Node) int {
-	return getHeight(p.right) - getHeight(p.left)
+func getBalanceFactor(pNode *Node) int {
+	return getHeight(pNode.right) - getHeight(pNode.left)
 }
 
-func fixHeight(p *Node) {
-	leftInt := getHeight(p.right)
-	rightInt := getHeight(p.left)
+func fixHeight(pNode *Node) {
+	leftInt := getHeight(pNode.right)
+	rightInt := getHeight(pNode.left)
 
 	if leftInt > rightInt {
-		p.height = leftInt + 1
+		pNode.height = leftInt + 1
 	} else {
-		p.height = rightInt + 1
+		pNode.height = rightInt + 1
 	}
 }
 
@@ -61,31 +67,37 @@ func rotateLeft(q *Node) *Node {
 	return p
 }
 
-func balance(p *Node) *Node {
-    fixHeight(p)
-    if getBalanceFactor(p) == 2 {
-    	if getBalanceFactor(p.right) < 0 {
-    		p.right = rotateRight(p.right)
+func balance(pNode *Node) *Node {
+    fixHeight(pNode)
+    if getBalanceFactor(pNode) == 2 {
+    	if getBalanceFactor(pNode.right) < 0 {
+    		pNode.right = rotateRight(pNode.right)
 		}
-		return rotateLeft(p)
+		return rotateLeft(pNode)
 	}
-	if getBalanceFactor(p) == -2 {
-		if getBalanceFactor(p.left) > 0 {
-			p.left = rotateLeft(p.left)
+	if getBalanceFactor(pNode) == -2 {
+		if getBalanceFactor(pNode.left) > 0 {
+			pNode.left = rotateLeft(pNode.left)
 		}
-		return rotateRight(p)
+		return rotateRight(pNode)
 	}
+	return pNode
+}
+
+func createNewNode(field Abstract) *Node {
+	p := new(Node)
+	p.Data = field
+	p.height = 1
+	p.left = nil
+	p.right = nil
+	p.parent = p
 	return p
 }
 
+
 func addToNodeRec(p *Node, field Abstract) *Node{
 	if p == nil {
-		p = new(Node)
-		p.Data = field
-		p.height = 1
-		p.left = nil
-		p.right = nil
-		p.parent = p
+		p = createNewNode(field)
 		return p
 	}
 	if p.Data.Less(field) {
@@ -98,13 +110,8 @@ func addToNodeRec(p *Node, field Abstract) *Node{
 
 func addToNodeRecBalance(p *Node, field Abstract) *Node{
     if p == nil {
-    	p = new(Node)
-    	p.Data = field
-    	p.height = 1
-    	p.left = nil
-    	p.right = nil
-    	p.parent = p
-    	return p
+		p = createNewNode(field)
+		return p
 	}
 	if p.Data.Less(field) {
 		p.left = addToNodeRecBalance(p.left, field)
@@ -177,74 +184,42 @@ func (ptr *Node) excludeParent() {
 
 
 
-func (t *Tree) Erase(p *Node) {
-	if p.left != nil {
-		ptr := t.max(p.left)
-		p.Data = ptr.Data
-		ptr.excludeChildrenTo(ptr.left)
+func (t *Tree) Erase(pEraseNode *Node) {
+	if pEraseNode.left != nil {
+		pMaxNode := t.max(pEraseNode.left)
+		pEraseNode.Data = pMaxNode.Data
+		pMaxNode.excludeChildrenTo(pMaxNode.left)
 	} else {
-		if p.right == nil {
-			p.excludeParent()
+		if pEraseNode.right == nil {
+			pEraseNode.excludeParent()
 		} else {
-			ptr := t.min(p.right)
-			p.Data = ptr.Data
-			ptr.excludeChildrenTo(ptr.right)
+			pMinNode := t.min(pEraseNode.right)
+			pEraseNode.Data = pMinNode.Data
+			pMinNode.excludeChildrenTo(pMinNode.right)
 		}
 	}
 }
 
-
-func (t *Tree) ErasePrev(p *Node) {
-	if p.left != nil {
-		tmp := t.max(p.left)
-		p.Data = tmp.Data
-		if tmp == tmp.parent.right {
-			tmp.parent.right = tmp.left
-		} else {
-			tmp.parent.left = tmp.left
-		}
-		if tmp.left != nil {
-			tmp.left.parent = tmp.parent
-		}
-	} else {
-		if p.right == nil {
-			if p.parent.left == p {
-				p.parent.left = nil
-			} else {
-				p.parent.right = nil
-			}
-			p.parent = nil
-		} else {
-			tmp := t.min(p.right)
-			p.Data = tmp.Data
-			if tmp == tmp.parent.left {
-				tmp.parent.left = tmp.right
-			} else {
-				tmp.parent.right = tmp.right
-			}
-			if tmp.right != nil {
-				tmp.right.parent = tmp.parent
-			}
-		}
-	}
-}
 
 func (t *Tree) Find(abstract Abstract) *Node {
-	tmp := t.root
-	for !tmp.Data.Equals(abstract) {
-		if tmp.Data.Less(abstract) {
-			tmp = tmp.left
+	pCurrNode := t.root
+	for !pCurrNode.Data.Equals(abstract) {
+		if pCurrNode.Data.Less(abstract) {
+			pCurrNode = pCurrNode.left
 		} else {
-			tmp = tmp.right
+			pCurrNode = pCurrNode.right
 		}
-		if tmp == nil {
-			return tmp
+		if pCurrNode == nil {
+			return pCurrNode
 		}
 	}
-	return tmp
+	return pCurrNode
 }
 
-
+/*
+ * Additional recursive function
+ * used in main interface of FindRec function
+ */
 func findRec(abstract Abstract, p *Node) *Node {
 	if p == nil || p.Data.Equals(abstract) {
 		return p
@@ -262,37 +237,176 @@ func (t *Tree) FindRec(abstract Abstract) *Node {
 }
 
 
-func (t *Tree) min(p *Node) *Node {
-	if p.left != nil {
-		tmp := p.left
+func (t *Tree) min(pRoot *Node) *Node {
+	if pRoot.left != nil {
+		tmp := pRoot.left
 		for ; tmp.left != nil; tmp = tmp.left {
 		}
 		return tmp
 	}
-	return p
+	return pRoot
 }
 
-func (t *Tree) max(p *Node) *Node {
-	if p.right != nil {
-		tmp := p.right
+func (t *Tree) max(pRoot *Node) *Node {
+	if pRoot.right != nil {
+		tmp := pRoot.right
 		for ; tmp.right != nil; tmp = tmp.right {
 		}
 		return tmp
 	}
-	return p
+	return pRoot
 }
 
-func (t *Tree) printTree(p *Node, depth int) {
-	if p != nil {
+func (t *Tree) printTree(pRoot *Node, depth int) {
+	if pRoot != nil {
 		for i := 0; i < depth; i++ {
 			fmt.Print("	")
 		}
-		fmt.Println(p.Data)
-		t.printTree(p.left, depth+1)
-		t.printTree(p.right, depth+1)
+		fmt.Println(pRoot.Data)
+		t.printTree(pRoot.left, depth+1)
+		t.printTree(pRoot.right, depth+1)
 	}
 }
 
 func (t *Tree) Print() {
 	t.printTree(t.root, 0)
+}
+
+
+func bfs(pRoot *Node, str string) {
+	queue := list.New()
+	queue.PushBack(pRoot)
+
+	file, err := os.Create(str)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	for ; queue.Len() > 0 ; {
+		p_node := queue.Front()
+
+		queue.Remove(p_node)
+		file.WriteString(p_node.Value.(*Node).Data.GetAuthor())
+		file.WriteString(p_node.Value.(*Node).Data.GetName())
+
+		//fmt.Println(p_node.Value.(*Node).Data)
+
+		if p_node.Value.(*Node).left != nil {
+			queue.PushBack(p_node.Value.(*Node).left)
+		}
+		if p_node.Value.(*Node).right != nil {
+			queue.PushBack(p_node.Value.(*Node).right)
+		}
+	}
+}
+
+
+func bfsParalel(pRoot *Node, str string) {
+	defer Wg.Done()
+	bfs(pRoot, str)
+}
+
+
+func (t *Tree) Bfs() {
+	bfs(t.root, "CasualFile.dat")
+}
+
+func (t *Tree) BfsParalel() {
+	file, err := os.Create("/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine0.dat")
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	pFirst := t.root
+	pLeft1 := pFirst.left
+	pRight1 := pFirst.right
+
+	file.WriteString(pLeft1.Data.GetAuthor())
+	file.WriteString(pLeft1.Data.GetName())
+
+	file.WriteString(pRight1.Data.GetAuthor())
+	file.WriteString(pRight1.Data.GetName())
+
+	Wg.Add(GoRoutinesCount)
+
+	go bfsParalel(pLeft1.left, "/home/thereptile/" +
+	"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine1.dat")
+	go bfsParalel(pLeft1.right, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine2.dat")
+	go bfsParalel(pRight1.left, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine3.dat")
+	go bfsParalel(pRight1.right, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine4.dat")
+}
+
+
+
+func dfs(pRoot *Node, str string) {
+	stack := list.New()
+	stack.PushBack(pRoot)
+
+	file, err := os.Create(str)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	for ; stack.Len() > 0 ; {
+		p_node := stack.Back()
+
+		stack.Remove(p_node)
+		file.WriteString(p_node.Value.(*Node).Data.GetAuthor())
+		file.WriteString(p_node.Value.(*Node).Data.GetName())
+
+		if p_node.Value.(*Node).left != nil {
+			stack.PushBack(p_node.Value.(*Node).left)
+		}
+		if p_node.Value.(*Node).right != nil {
+			stack.PushBack(p_node.Value.(*Node).right)
+		}
+	}
+}
+
+
+func dfsParalel(pRoot *Node, str string) {
+	defer Wg.Done()
+	dfs(pRoot, str)
+}
+
+
+func (t *Tree) Dfs() {
+	dfs(t.root, "CasualFile.dat")
+}
+
+func (t *Tree) DfsParalel() {
+	file, err := os.Create("/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine0.dat")
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	pFirst := t.root
+	pLeft1 := pFirst.left
+	pRight1 := pFirst.right
+
+	file.WriteString(pLeft1.Data.GetAuthor())
+	file.WriteString(pLeft1.Data.GetName())
+
+	file.WriteString(pRight1.Data.GetAuthor())
+	file.WriteString(pRight1.Data.GetName())
+
+	Wg.Add(GoRoutinesCount)
+
+	go dfsParalel(pLeft1.left, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine1.dat")
+	go dfsParalel(pLeft1.right, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine2.dat")
+	go dfsParalel(pRight1.left, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine3.dat")
+	go dfsParalel(pRight1.right, "/home/thereptile/" +
+		"GoglandProjects/CompArchitecture_labs/lab1_sem2/goRoutine4.dat")
 }
